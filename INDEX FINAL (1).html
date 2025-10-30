@@ -186,6 +186,7 @@
       display: flex;
       gap: 10px;
       margin-top: auto;
+      position: relative;
     }
 
     .cost-card .actions button {
@@ -215,6 +216,43 @@
       font-size: 0.8rem;
     }
 
+    .group-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .action-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-light);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+      min-width: 200px;
+    }
+
+    .action-menu button {
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent-dark);
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .action-menu button:hover {
+      background: rgba(194, 125, 63, 0.12);
+    }
+
     .cost-summary {
       background: rgba(255,255,255,0.8);
       border-radius: 14px;
@@ -223,6 +261,74 @@
       flex-direction: column;
       gap: 12px;
       box-shadow: var(--shadow-light);
+    }
+
+    .capital-overview {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(194, 125, 63, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .capital-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .capital-row label {
+      font-weight: 600;
+      color: var(--muted-text);
+    }
+
+    .capital-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .capital-input-wrapper input[type="number"] {
+      max-width: 160px;
+      min-width: 120px;
+    }
+
+    .capital-amount {
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    .capital-coverage-message {
+      display: none;
+      background: rgba(76, 130, 86, 0.18);
+      color: #3d6b3b;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      color: var(--muted-text);
+    }
+
+    .checkbox-list input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
     }
 
     .summary-top {
@@ -677,9 +783,23 @@
       </div>
       <div id="costsList" class="card-grid"></div>
       <div class="cost-summary">
-        <div class="summary-top">
-          <strong>Total prorrateado (<span id="currentPeriodLabel"></span>):</strong>
-          <span id="totalCostDisplay">$0,00</span>
+        <div class="capital-overview">
+          <div class="capital-row">
+            <span>Total prorrateado (<span id="currentPeriodLabel"></span>):</span>
+            <strong id="totalCostDisplay">$0,00</strong>
+          </div>
+          <div class="capital-row">
+            <label for="availableCapitalInput">Capital disponible</label>
+            <div class="capital-input-wrapper">
+              <input type="number" id="availableCapitalInput" min="0" step="0.01" inputmode="decimal" />
+              <span class="capital-amount" id="availableCapitalDisplay">$0,00</span>
+            </div>
+          </div>
+          <div class="capital-row">
+            <span>Objetivo neto a cubrir:</span>
+            <strong id="netTargetDisplay">$0,00</strong>
+          </div>
+          <div class="capital-coverage-message" id="capitalCoverageMessage" role="status" aria-live="polite">Objetivo cubierto: no se requieren ventas</div>
         </div>
         <div class="collapsible">
           <button type="button" id="toggleCostDetail">
@@ -786,6 +906,7 @@
       let state = loadState();
       let lastResults = [];
       let toastTimeout = null;
+      let activeActionMenuCleanup = null;
 
       const modalRoot = ensureModalRoot();
 
@@ -1092,6 +1213,10 @@
         renameGroupBtn: document.getElementById('renameGroupBtn'),
         deleteGroupBtn: document.getElementById('deleteGroupBtn'),
         totalCostDisplay: document.getElementById('totalCostDisplay'),
+        availableCapitalInput: document.getElementById('availableCapitalInput'),
+        availableCapitalDisplay: document.getElementById('availableCapitalDisplay'),
+        netTargetDisplay: document.getElementById('netTargetDisplay'),
+        capitalCoverageMessage: document.getElementById('capitalCoverageMessage'),
         currentPeriodLabel: document.getElementById('currentPeriodLabel'),
         costDetailPanel: document.getElementById('costDetailPanel'),
         costDetailToggle: document.getElementById('toggleCostDetail'),
@@ -1113,6 +1238,7 @@
           merged.costGroups = Array.isArray(parsed.costGroups) ? parsed.costGroups.map(copyCostGroup).filter(Boolean) : [];
           merged.activeCostGroupId = parsed.activeCostGroupId && merged.costGroups.some(group => group.id === parsed.activeCostGroupId) ? parsed.activeCostGroupId : null;
           merged.settings = Object.assign({}, getDefaultState().settings, parsed.settings || {});
+          merged.settings.availableCapital = Math.max(0, parseFloat(merged.settings.availableCapital) || 0);
           ensureMixCompleteness(merged);
           return merged;
         } catch (error) {
@@ -1144,6 +1270,7 @@
             commissions: { enabled: false, pct: 0, fixed: 0 },
             mode: 'single',
             selectedSkuId: DEFAULT_PRODUCTS[0].id,
+            availableCapital: 0,
             mix
           }
         };
@@ -1168,7 +1295,14 @@
       function copyCost(cost) {
         if (!cost) return null;
         const cloned = Object.assign({}, cost);
-        cloned.groupId = cloned.groupId || null;
+        if (Array.isArray(cloned.groupIds)) {
+          cloned.groupIds = cloned.groupIds.filter((id) => typeof id === 'string' && id);
+        } else if (cloned.groupId) {
+          cloned.groupIds = [cloned.groupId];
+        } else {
+          cloned.groupIds = [];
+        }
+        delete cloned.groupId;
         return cloned;
       }
 
@@ -1226,6 +1360,10 @@
         elements.calculateMixBtn.addEventListener('click', handleMixCalculation);
         elements.generateOptionsBtn.addEventListener('click', handleGenerateOptions);
         elements.costDetailToggle.addEventListener('click', toggleCostDetailPanel);
+        if (elements.availableCapitalInput) {
+          elements.availableCapitalInput.addEventListener('input', handleAvailableCapitalChange);
+          elements.availableCapitalInput.addEventListener('blur', normalizeAvailableCapitalInput);
+        }
         document.querySelectorAll('.mode-selector button').forEach((button) => {
           button.addEventListener('click', () => {
             state.settings.mode = button.dataset.mode;
@@ -1443,12 +1581,16 @@
 
       function getActiveCosts() {
         if (!state.activeCostGroupId) return state.costs.slice();
-        return state.costs.filter(cost => cost.groupId === state.activeCostGroupId);
+        return state.costs.filter(cost => Array.isArray(cost.groupIds) && cost.groupIds.includes(state.activeCostGroupId));
       }
 
       function renderCosts() {
         const list = elements.costsList;
         list.innerHTML = '';
+        if (activeActionMenuCleanup) {
+          activeActionMenuCleanup();
+          activeActionMenuCleanup = null;
+        }
         const costs = getActiveCosts();
         if (!costs.length) {
           const empty = document.createElement('div');
@@ -1457,34 +1599,143 @@
           list.appendChild(empty);
           return;
         }
-        const showGroupBadge = !state.activeCostGroupId;
         const activePeriodLabel = (PERIOD_LABELS[state.settings.period] || 'Seleccionado').toLowerCase();
         costs.forEach((cost) => {
           const card = document.createElement('div');
           card.className = 'cost-card';
+          const title = document.createElement('h3');
+          title.textContent = cost.name;
+          card.appendChild(title);
+
           const amountText = currencyFormatter.format(cost.amount);
           const amortizationText = cost.type === 'inversion' ? `Amortiza en ${cost.amortization || 1} períodos` : 'Fijo recurrente';
           const prorated = currencyFormatter.format(prorateCostAmount(cost, state.settings.period));
-          const group = cost.groupId ? state.costGroups.find(g => g.id === cost.groupId) : null;
           const periodLabel = PERIOD_LABELS[cost.period] || 'Sin período';
-          card.innerHTML = `
-            <h3>${cost.name}</h3>
-            <div class="meta">
-              <span class="inline-chip">${cost.type === 'inversion' ? 'Inversión' : 'Fijo'}</span>
-              <span>${amountText} (${periodLabel})</span>
-              <span>${amortizationText}</span>
-              ${showGroupBadge && group ? `<span class="inline-chip">Grupo: ${group.name}</span>` : ''}
-            </div>
-            <div>Equivale a <strong>${prorated}</strong> por período ${activePeriodLabel}.</div>
-            <div class="actions">
-              <button class="edit">Editar</button>
-              <button class="delete">Eliminar</button>
-            </div>
-          `;
-          card.querySelector('.edit').addEventListener('click', () => openCostModal(cost));
-          card.querySelector('.delete').addEventListener('click', () => deleteCost(cost.id));
+
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const typeChip = document.createElement('span');
+          typeChip.className = 'inline-chip';
+          typeChip.textContent = cost.type === 'inversion' ? 'Inversión' : 'Fijo';
+          meta.appendChild(typeChip);
+          const amountSpan = document.createElement('span');
+          amountSpan.textContent = `${amountText} (${periodLabel})`;
+          meta.appendChild(amountSpan);
+          const amortizationSpan = document.createElement('span');
+          amortizationSpan.textContent = amortizationText;
+          meta.appendChild(amortizationSpan);
+          card.appendChild(meta);
+
+          const groupIds = Array.isArray(cost.groupIds) ? cost.groupIds : [];
+          const groups = groupIds.map((id) => state.costGroups.find((group) => group.id === id)).filter(Boolean);
+          const chipRow = document.createElement('div');
+          chipRow.className = 'group-chip-row';
+          if (groups.length) {
+            groups.forEach((group) => {
+              const chip = document.createElement('span');
+              chip.className = 'inline-chip';
+              chip.textContent = group.name;
+              chipRow.appendChild(chip);
+            });
+          } else {
+            const chip = document.createElement('span');
+            chip.className = 'inline-chip';
+            chip.textContent = 'Sin grupo';
+            chipRow.appendChild(chip);
+          }
+          card.appendChild(chipRow);
+
+          const equivalence = document.createElement('div');
+          equivalence.innerHTML = `Equivale a <strong>${prorated}</strong> por período ${activePeriodLabel}.`;
+          card.appendChild(equivalence);
+
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+          const editBtn = document.createElement('button');
+          editBtn.className = 'edit';
+          editBtn.textContent = 'Editar';
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete';
+          deleteBtn.textContent = 'Eliminar';
+          actions.appendChild(editBtn);
+          actions.appendChild(deleteBtn);
+          card.appendChild(actions);
+
+          editBtn.addEventListener('click', () => {
+            if (activeActionMenuCleanup) {
+              activeActionMenuCleanup();
+              activeActionMenuCleanup = null;
+            }
+            openCostModal(cost);
+          });
+          if (state.activeCostGroupId) {
+            deleteBtn.addEventListener('click', (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (activeActionMenuCleanup) {
+                activeActionMenuCleanup();
+              }
+              const menu = document.createElement('div');
+              menu.className = 'action-menu';
+              const removeBtn = document.createElement('button');
+              removeBtn.type = 'button';
+              removeBtn.textContent = 'Quitar de este grupo';
+              const deleteAllBtn = document.createElement('button');
+              deleteAllBtn.type = 'button';
+              deleteAllBtn.textContent = 'Eliminar costo completamente';
+              menu.appendChild(removeBtn);
+              menu.appendChild(deleteAllBtn);
+              actions.appendChild(menu);
+
+              const cleanup = () => {
+                if (menu.parentNode) {
+                  menu.parentNode.removeChild(menu);
+                }
+                document.removeEventListener('click', handleOutsideClick);
+                activeActionMenuCleanup = null;
+              };
+
+              const handleOutsideClick = (evt) => {
+                if (!menu.contains(evt.target) && evt.target !== deleteBtn) {
+                  cleanup();
+                }
+              };
+
+              removeBtn.addEventListener('click', () => {
+                cleanup();
+                removeCostFromGroup(cost.id, state.activeCostGroupId);
+              });
+              deleteAllBtn.addEventListener('click', () => {
+                cleanup();
+                deleteCost(cost.id);
+              });
+
+              setTimeout(() => document.addEventListener('click', handleOutsideClick), 0);
+              activeActionMenuCleanup = cleanup;
+            });
+          } else {
+            deleteBtn.addEventListener('click', () => deleteCost(cost.id));
+          }
           list.appendChild(card);
         });
+      }
+
+      function removeCostFromGroup(costId, groupId) {
+        if (!groupId) return;
+        if (activeActionMenuCleanup) {
+          activeActionMenuCleanup();
+          activeActionMenuCleanup = null;
+        }
+        const index = state.costs.findIndex((cost) => cost.id === costId);
+        if (index === -1) return;
+        const current = state.costs[index];
+        const updatedGroups = Array.isArray(current.groupIds) ? current.groupIds.filter((id) => id !== groupId) : [];
+        state.costs[index] = Object.assign({}, current, { groupIds: updatedGroups });
+        saveState();
+        renderCosts();
+        updateCostSummary();
+        renderResults([]);
+        showToast('Costo quitado del grupo');
       }
 
       function renderGroupControls() {
@@ -1582,7 +1833,12 @@
         }); // REPLACED: native dialog → internal modal
         if (!confirmed) return;
         state.costGroups = state.costGroups.filter(g => g.id !== group.id);
-        state.costs = state.costs.map((cost) => cost.groupId === group.id ? Object.assign({}, cost, { groupId: null }) : cost);
+        state.costs = state.costs.map((cost) => {
+          const currentGroups = Array.isArray(cost.groupIds) ? cost.groupIds.filter((id) => id !== group.id) : [];
+          const updated = Object.assign({}, cost, { groupIds: currentGroups });
+          delete updated.groupId;
+          return updated;
+        });
         state.activeCostGroupId = null;
         saveState();
         renderGroupControls();
@@ -1595,10 +1851,16 @@
         const isEdit = Boolean(existingCost);
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
-        const cost = isEdit ? Object.assign({}, existingCost) : { type: 'fijo', period: 'mensual', amortization: 6, groupId: state.activeCostGroupId || null };
-        cost.groupId = cost.groupId || null;
+        const cost = isEdit ? Object.assign({}, existingCost) : { type: 'fijo', period: 'mensual', amortization: 6, groupIds: state.activeCostGroupId ? [state.activeCostGroupId] : [] };
+        if (Array.isArray(cost.groupIds)) {
+          cost.groupIds = cost.groupIds.filter((id) => typeof id === 'string' && id);
+        } else if (cost.groupId) {
+          cost.groupIds = [cost.groupId];
+        } else {
+          cost.groupIds = [];
+        }
+        delete cost.groupId;
         cost.period = cost.period || 'mensual';
-        const groupOptions = state.costGroups.map((group) => `<option value="${group.id}" ${group.id === (cost.groupId || '') ? 'selected' : ''}>${group.name}</option>`).join('');
         overlay.innerHTML = `
           <div class="modal" role="dialog" aria-modal="true">
             <h3>${isEdit ? 'Editar costo' : 'Nuevo costo'}</h3>
@@ -1626,13 +1888,10 @@
                 <option value="anual" ${cost.period === 'anual' ? 'selected' : ''}>Anual</option>
               </select>
             </label>
-            <label>
-              <span>Grupo de costos</span>
-              <select id="costGroupAssignment">
-                <option value="" ${(cost.groupId ? '' : 'selected')}>Sin grupo</option>
-                ${groupOptions}
-              </select>
-            </label>
+            <div>
+              <span style="display:block; font-size:0.9rem; font-weight:600; color: var(--muted-text);">Grupos de costos</span>
+              <div id="costGroupCheckboxes" class="checkbox-list"></div>
+            </div>
             <label id="amortizationRow" style="display:${cost.type === 'inversion' ? 'block' : 'none'};">
               <span>Plazo de amortización (en períodos)</span>
               <input type="number" id="costAmortization" min="1" step="1" value="${cost.amortization || 6}" />
@@ -1651,11 +1910,34 @@
           period: overlay.querySelector('#costPeriod'),
           amortization: overlay.querySelector('#costAmortization'),
           amortizationRow: overlay.querySelector('#amortizationRow'),
-          group: overlay.querySelector('#costGroupAssignment')
+          groupContainer: overlay.querySelector('#costGroupCheckboxes')
         };
         inputs.type.addEventListener('change', () => {
           inputs.amortizationRow.style.display = inputs.type.value === 'inversion' ? 'block' : 'none';
         });
+        if (inputs.groupContainer) {
+          inputs.groupContainer.innerHTML = '';
+          if (!state.costGroups.length) {
+            const note = document.createElement('div');
+            note.className = 'modal-message';
+            note.style.margin = '0';
+            note.textContent = 'Aún no creaste grupos. Podés guardar el costo sin asignarlo.';
+            inputs.groupContainer.appendChild(note);
+          } else {
+            state.costGroups.forEach((group) => {
+              const label = document.createElement('label');
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.value = group.id;
+              checkbox.checked = cost.groupIds.includes(group.id);
+              label.appendChild(checkbox);
+              const span = document.createElement('span');
+              span.textContent = group.name;
+              label.appendChild(span);
+              inputs.groupContainer.appendChild(label);
+            });
+          }
+        }
         const close = () => document.body.removeChild(overlay);
         overlay.addEventListener('click', (event) => {
           if (event.target === overlay) close();
@@ -1678,6 +1960,8 @@
             }); // REPLACED: native dialog → internal modal
             return;
           }
+          const selectedGroupIds = inputs.groupContainer ? Array.from(inputs.groupContainer.querySelectorAll('input[type="checkbox"]:checked')).map((checkbox) => checkbox.value) : [];
+          const uniqueGroupIds = Array.from(new Set(selectedGroupIds.filter(Boolean)));
           const costData = {
             id: isEdit ? existingCost.id : `cost_${Date.now()}`,
             name,
@@ -1685,7 +1969,7 @@
             amount,
             period: inputs.period.value,
             amortization: inputs.type.value === 'inversion' ? Math.max(1, parseInt(inputs.amortization.value, 10) || 1) : null,
-            groupId: inputs.group.value || null
+            groupIds: uniqueGroupIds
           };
           if (isEdit) {
             const index = state.costs.findIndex(c => c.id === existingCost.id);
@@ -1703,6 +1987,10 @@
       }
 
       async function deleteCost(id) {
+        if (activeActionMenuCleanup) {
+          activeActionMenuCleanup();
+          activeActionMenuCleanup = null;
+        }
         const confirmed = await openConfirmModal({
           title: 'Eliminar costo',
           message: '¿Eliminar este costo?',
@@ -1743,7 +2031,51 @@
         const periodLabel = PERIOD_LABELS[state.settings.period] || 'Seleccionado';
         elements.currentPeriodLabel.textContent = periodLabel.toLowerCase();
         elements.totalCostDisplay.textContent = currencyFormatter.format(total);
+        updateCapitalOverview(total);
         renderCostDetailPanel();
+      }
+
+      function updateCapitalOverview(total) {
+        const available = Math.max(0, parseFloat(state.settings.availableCapital) || 0);
+        state.settings.availableCapital = available;
+        if (elements.availableCapitalInput && document.activeElement !== elements.availableCapitalInput) {
+          elements.availableCapitalInput.value = available === 0 ? 0 : available;
+        }
+        if (elements.availableCapitalDisplay) {
+          elements.availableCapitalDisplay.textContent = currencyFormatter.format(available);
+        }
+        const net = Math.max(0, total - available);
+        if (elements.netTargetDisplay) {
+          elements.netTargetDisplay.textContent = currencyFormatter.format(net);
+        }
+        if (elements.capitalCoverageMessage) {
+          elements.capitalCoverageMessage.style.display = total > 0 && available >= total ? 'block' : 'none';
+        }
+      }
+
+      function handleAvailableCapitalChange(event) {
+        const raw = typeof event.target.value === 'string' ? event.target.value.replace(',', '.') : event.target.value;
+        const parsed = parseFloat(raw);
+        const sanitized = Math.max(0, isNaN(parsed) ? 0 : parsed);
+        if (event.target.value === '') {
+          state.settings.availableCapital = 0;
+        } else {
+          state.settings.availableCapital = sanitized;
+        }
+        saveState();
+        updateCostSummary();
+        renderResults([]);
+      }
+
+      function normalizeAvailableCapitalInput() {
+        if (!elements.availableCapitalInput) return;
+        const rawValue = elements.availableCapitalInput.value;
+        const parsed = parseFloat(typeof rawValue === 'string' ? rawValue.replace(',', '.') : rawValue);
+        const sanitized = Math.max(0, isNaN(parsed) ? 0 : parsed);
+        state.settings.availableCapital = sanitized;
+        elements.availableCapitalInput.value = sanitized === 0 ? 0 : sanitized;
+        saveState();
+        updateCostSummary();
       }
 
       function renderCostDetailPanel() {
@@ -1946,9 +2278,11 @@
           return { title, error: 'La combinación no es válida.' };
         }
         entries.forEach((entry) => { entry.fraction = entry.fraction / totalFraction; });
-        const targetBase = calculateTotalCost();
+        const grossTarget = calculateTotalCost();
+        const availableCapital = Math.max(0, parseFloat(state.settings.availableCapital) || 0);
+        const targetBase = Math.max(0, grossTarget - availableCapital);
         if (targetBase <= 0) {
-          return { title, message: 'El objetivo actual es 0. No se requieren unidades.', items: [], totalRevenue: 0, totalRevenueExact: 0, totalRevenueReal: 0, goalAmount: 0, baseCost: 0, warnings: [], totalUnits: 0, totalUnitsExact: 0, totalUnitsReal: 0 };
+          return { title, message: 'Objetivo cubierto: no se requieren ventas', items: [], totalRevenue: 0, totalRevenueExact: 0, totalRevenueReal: 0, goalAmount: 0, baseCost: 0, warnings: [], totalUnits: 0, totalUnitsExact: 0, totalUnitsReal: 0 };
         }
         const marginSum = entries.reduce((acc, entry) => acc + (entry.marginUnit * entry.fraction), 0);
         if (marginSum <= 0) {
