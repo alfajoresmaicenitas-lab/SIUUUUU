@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,8 +28,9 @@
       font-family: "Inter", "Poppins", "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
       background: var(--bg-color);
       color: var(--text-color);
-      line-height: 1.5;
-      padding: 40px 16px 80px;
+      line-height: 1.6;
+      padding: 48px 20px 100px;
+      font-size: 15px;
     }
 
     .app-shell {
@@ -36,7 +38,7 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 40px;
     }
 
     header {
@@ -44,24 +46,28 @@
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
-      padding: 24px;
+      padding: 32px 28px;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
+      margin-bottom: 8px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.8rem;
-      letter-spacing: 0.02em;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
     }
 
     button.primary {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 10px 18px;
+      padding: 12px 24px;
       border-radius: 999px;
       font-weight: 600;
+      font-size: 15px;
       cursor: pointer;
       box-shadow: var(--shadow-light);
       transition: var(--transition);
@@ -69,48 +75,86 @@
 
     button.primary:hover {
       background: var(--accent-dark);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    button.primary:active {
+      transform: translateY(0);
     }
 
     section {
       background: var(--card-bg);
-      padding: 24px;
+      padding: 32px 28px;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 24px;
     }
 
     section h2 {
-      margin: 0;
-      font-size: 1.4rem;
+      margin: 0 0 8px 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 18px;
+    #roiResultsSection .card-grid {
+      justify-content: center;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
-    .sku-card, .cost-card, .result-card {
+    section h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    section p {
+      margin: 0;
+      line-height: 1.7;
+      color: var(--muted-text);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .sku-card,
+    .cost-card,
+    .result-card {
       background: white;
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 14px;
+      padding: 20px;
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       position: relative;
+      transition: var(--transition);
+    }
+
+    .sku-card:hover,
+    .cost-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
     }
 
     .sku-card h3 {
       margin: 0;
       font-size: 1.2rem;
+      font-weight: 700;
       color: var(--accent-dark);
+      line-height: 1.3;
     }
 
     .tag {
@@ -210,7 +254,7 @@
     }
 
     .inline-chip {
-      background: rgba(0,0,0,0.06);
+      background: rgba(0, 0, 0, 0.06);
       border-radius: 999px;
       padding: 2px 8px;
       font-size: 0.8rem;
@@ -254,7 +298,7 @@
     }
 
     .cost-summary {
-      background: rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 14px;
       padding: 16px;
       display: flex;
@@ -351,7 +395,7 @@
       height: 24px;
       -webkit-appearance: none;
       appearance: none;
-      background: rgba(0,0,0,0.15);
+      background: rgba(0, 0, 0, 0.15);
       border-radius: 999px;
       position: relative;
       outline: none;
@@ -369,7 +413,7 @@
       background: white;
       border-radius: 50%;
       transition: var(--transition);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     }
 
     .toggle input:checked {
@@ -382,42 +426,56 @@
 
     .parameter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
       align-items: start;
     }
 
     .parameter-card {
       background: white;
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 12px;
+      padding: 18px 20px;
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    label span {
-      display: block;
-      font-size: 0.9rem;
+    .parameter-card label {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       font-weight: 600;
-      color: var(--muted-text);
-      margin-bottom: 6px;
+      color: var(--text-color);
     }
 
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      padding: 10px 12px;
+    .parameter-card label span {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      padding: 12px 14px;
+      border: 1.5px solid #e0d0c0;
       border-radius: 10px;
-      border: 1px solid rgba(0,0,0,0.12);
-      font-size: 1rem;
+      font-size: 15px;
+      font-family: inherit;
+      background: white;
       transition: var(--transition);
+      outline: none;
     }
 
-    select:focus, input:focus {
-      outline: none;
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(194,125,63,0.18);
+      box-shadow: 0 0 0 3px rgba(194, 125, 63, 0.1);
+    }
+
+    input::placeholder {
+      color: #b8a89a;
     }
 
     .mode-selector {
@@ -428,7 +486,7 @@
 
     .mode-selector button {
       flex: 1 1 140px;
-      background: rgba(194,125,63,0.12);
+      background: rgba(194, 125, 63, 0.12);
       border: none;
       padding: 10px 12px;
       border-radius: 12px;
@@ -501,7 +559,7 @@
     }
 
     .result-body li {
-      background: rgba(194,125,63,0.08);
+      background: rgba(194, 125, 63, 0.08);
       border-radius: 12px;
       padding: 10px 12px;
       font-weight: 600;
@@ -572,7 +630,7 @@
     }
 
     .collapsible {
-      background: rgba(194,125,63,0.08);
+      background: rgba(194, 125, 63, 0.08);
       padding: 14px;
       border-radius: 12px;
       display: flex;
@@ -725,7 +783,7 @@
     }
 
     .modal-actions button.cancel {
-      background: rgba(0,0,0,0.08);
+      background: rgba(0, 0, 0, 0.08);
       color: var(--muted-text);
     }
 
@@ -749,19 +807,248 @@
         font-size: 0.95rem;
       }
     }
+
+    /* Menu Styles */
+    .main-menu {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 20px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 40px;
+    }
+
+    .menu-card {
+      background: white;
+      border: none;
+      border-radius: 20px;
+      padding: 44px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(90, 60, 30, 0.25);
+    }
+
+    .menu-card .icon {
+      font-size: 3.5rem;
+      margin-bottom: 8px;
+    }
+
+    .menu-card h2 {
+      margin: 0;
+      color: var(--accent-dark);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .menu-card p {
+      margin: 0;
+      color: var(--muted-text);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Product Mix Inputs in ROI */
+    .roi-product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: white;
+      background: transparent;
+      padding: 0;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    .roi-product-group {
+      background: #faf6f2;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(194, 125, 63, 0.12);
+      box-shadow: 0 2px 8px rgba(90, 60, 30, 0.04);
+    }
+
+    .roi-product-group h4 {
+      margin: 0 0 16px 0;
+      color: var(--accent-dark);
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .roi-qty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .roi-qty-item label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted-text);
+      margin-bottom: 6px;
+    }
+
+    .roi-qty-item input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #e0d0c0;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 15px;
+      transition: var(--transition);
+    }
+
+    .roi-qty-item input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(194, 125, 63, 0.1);
+      outline: none;
+    }
+
+
+    .app-nav {
+      margin-bottom: 16px;
+    }
+
+    .back-btn {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: rgba(194, 125, 63, 0.2);
+      color: var(--accent-dark);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      cursor: help;
+      margin-left: 6px;
+      position: relative;
+    }
+
+    .info-icon:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #3d2f21;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      width: max-content;
+      max-width: 250px;
+      z-index: 100;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow);
+      font-weight: 400;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* Tabs */
+    .roi-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid rgba(194, 125, 63, 0.12);
+      padding-bottom: 12px;
+    }
+
+    .roi-tab-btn {
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted-text);
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    .roi-tab-btn:hover {
+      background: rgba(194, 125, 63, 0.06);
+      color: var(--accent-dark);
+    }
+
+    .roi-tab-btn.active {
+      background: rgba(194, 125, 63, 0.12);
+      color: var(--accent-dark);
+    }
   </style>
 </head>
-<body>
-  <div class="app-shell">
-    <header>
-      <h1>Calculadora de Rentabilidad</h1>
-      <button class="primary" id="resetDataBtn">Resetear datos</button>
-    </header>
 
-    <section id="productsSection">
+<body>
+  <div id="main-menu" class="main-menu">
+    <h1>Seleccioná una herramienta</h1>
+    <div class="menu-grid">
+      <button class="menu-card" id="btnOpenCostApp">
+        <div class="icon">💰</div>
+        <h2>Costos Fijos e Inversiones</h2>
+        <p>Gestioná tus costos fijos, variables y calculá precios.</p>
+      </button>
+      <button class="menu-card" id="btnOpenRoiApp">
+        <div class="icon">📈</div>
+        <h2>Calculadora de ROI</h2>
+        <p>Proyectá el retorno de inversión de tus campañas.</p>
+      </button>
+    </div>
+
+    <!-- Global Products Section -->
+    <section id="productsSection" style="width: 100%; max-width: 1200px;">
       <h2>Productos</h2>
       <div class="card-grid" id="productsGrid"></div>
+      <div style="margin-top: 16px; text-align: center;">
+        <button class="primary" id="addProductBtn">➕ Agregar Producto</button>
+      </div>
     </section>
+  </div>
+
+  <div id="cost-app" class="app-shell" style="display:none;">
+    <div class="app-nav">
+      <button class="ghost-button back-btn" id="backToMenuFromCost">← Volver al menú</button>
+    </div>
+    <header>
+      <h1>💰 Costos Fijos e Inversiones</h1>
+      <button class="primary" id="resetDataBtn">Resetear datos</button>
+    </header>
 
     <section id="costsSection">
       <div class="cost-header">
@@ -799,7 +1086,8 @@
             <span>Objetivo neto a cubrir:</span>
             <strong id="netTargetDisplay">$0,00</strong>
           </div>
-          <div class="capital-coverage-message" id="capitalCoverageMessage" role="status" aria-live="polite">Objetivo cubierto: no se requieren ventas</div>
+          <div class="capital-coverage-message" id="capitalCoverageMessage" role="status" aria-live="polite">Objetivo
+            cubierto: no se requieren ventas</div>
         </div>
         <div class="collapsible">
           <button type="button" id="toggleCostDetail">
@@ -864,7 +1152,8 @@
           <button class="primary" id="calculateMixBtn">Calcular mix manual</button>
         </div>
         <div class="mode-panel" data-panel="auto">
-          <p style="margin:0; color: var(--muted-text);">Generaremos 8 combinaciones diferentes para cubrir el objetivo según el margen y precio de los productos.</p>
+          <p style="margin:0; color: var(--muted-text);">Generaremos 8 combinaciones diferentes para cubrir el objetivo
+            según el margen y precio de los productos.</p>
           <button class="primary" id="generateOptionsBtn">Generar opciones</button>
         </div>
       </div>
@@ -876,12 +1165,162 @@
     </section>
   </div>
 
+  <div id="roi-app" class="app-shell" style="display:none;">
+    <div class="app-nav">
+      <button class="ghost-button back-btn" id="backToMenuFromRoi">← Volver al menú</button>
+    </div>
+    <header>
+      <h1>📈 Calculadora de ROI</h1>
+      <button class="primary" id="resetRoiBtn">Resetear cálculo</button>
+    </header>
+
+    <section>
+      <div class="roi-tabs">
+        <button class="roi-tab-btn active" data-tab="real">Modo Resultados Reales</button>
+        <button class="roi-tab-btn" data-tab="projection">Modo Proyección</button>
+      </div>
+
+      <div id="roiProjectionInputs" style="display:none;">
+        <h2>Datos de campaña (WhatsApp Funnel)</h2>
+        <div class="parameter-grid">
+          <div class="parameter-card">
+            <label>
+              <span>Inversión Total ($) <span class="info-icon"
+                  data-tooltip="Tu presupuesto total para la campaña publicitaria.">ℹ️</span></span>
+              <input type="number" id="roiBudget" min="0" step="1000" placeholder="Ej: 100000" />
+            </label>
+          </div>
+          <div class="parameter-card">
+            <label>
+              <span>CPM Estimado ($) <span class="info-icon"
+                  data-tooltip="Costo por Mil Impresiones. Cuánto te cobra Facebook por mostrar tu anuncio 1000 veces.">ℹ️</span></span>
+              <input type="number" id="roiCpm" min="0" step="100" placeholder="Ej: 2000" />
+            </label>
+          </div>
+          <div class="parameter-card">
+            <label>
+              <span>CTR Estimado (%) <span class="info-icon"
+                  data-tooltip="Click Through Rate. Porcentaje de personas que ven tu anuncio y hacen clic para enviarte un mensaje.">ℹ️</span></span>
+              <input type="number" id="roiCtr" min="0" max="100" step="0.1" placeholder="Ej: 1.5" />
+            </label>
+          </div>
+          <div class="parameter-card">
+            <label>
+              <span>Tasa de Cierre (%) <span class="info-icon"
+                  data-tooltip="De cada 100 personas que te escriben a WhatsApp, ¿a cuántas lográs venderles?">ℹ️</span></span>
+              <input type="number" id="roiConvRate" min="0" max="100" step="0.1" placeholder="Ej: 5.0" />
+            </label>
+          </div>
+          <div class="parameter-card">
+            <label>
+              <span>Ticket Promedio ($) <span class="info-icon"
+                  data-tooltip="El valor promedio de cada venta que cerrás.">ℹ️</span></span>
+              <input type="number" id="roiAov" min="0" step="100" placeholder="Ej: 25000" />
+            </label>
+          </div>
+          <div class="parameter-card">
+            <label>
+              <span>Margen Promedio (%) <span class="info-icon"
+                  data-tooltip="Tu ganancia real sobre el precio de venta (descontando costo de producto).">ℹ️</span></span>
+              <input type="number" id="roiMargin" min="0" max="100" step="1" placeholder="Ej: 40" />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="roiRealInputs">
+        <h2>Resultados Reales</h2>
+        <div class="parameter-grid">
+          <div class="parameter-card">
+            <label>
+              <span>Inversión Real en Ads ($) <span class="info-icon"
+                  data-tooltip="Lo que gastaste finalmente en publicidad.">ℹ️</span></span>
+              <input type="number" id="roiRealBudget" min="0" step="1000" placeholder="Ej: 100000" />
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <h3 style="font-size: 1.15rem; color: var(--accent-dark); margin-bottom: 16px;">Productos Vendidos</h3>
+          <p style="font-size: 0.9rem; color: var(--muted-text); margin-bottom: 16px;">Ingresá la cantidad de productos
+            vendidos (permite decimales, ej: 3.5 para 350 unidades).</p>
+          <div id="roiProductInputs"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <!-- Dynamic product inputs -->
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+        <button class="primary" id="calculateRoiBtn">Calcular Resultados</button>
+      </div>
+    </section>
+
+    <section id="roiResultsSection" style="display:none;">
+      <h2>Resultados</h2>
+      <div class="card-grid">
+        <div class="result-card" id="cardFunnel">
+          <h3>Embudo de Tráfico</h3>
+          <div class="result-body">
+            <ul>
+              <li><strong>Impresiones:</strong> <span id="resImpressions">-</span></li>
+              <li><strong>Mensajes Nuevos:</strong> <span id="resClicks">-</span></li>
+              <li><strong>Costo por Mensaje:</strong> <span id="resCpc">-</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="result-card" id="cardSales">
+          <h3>Ventas</h3>
+          <div class="result-body">
+            <ul>
+              <li><strong>Ventas estimadas:</strong> <span id="resConversions">-</span></li>
+              <li><strong>CPA (Costo p/venta):</strong> <span id="resCpa">-</span></li>
+              <li><strong>Tasa de Cierre:</strong> <span id="resGlobalConv">-</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="result-card">
+          <h3>Rentabilidad</h3>
+          <div class="result-body">
+            <ul>
+              <li><strong>Facturación Total:</strong> <span id="resRevenue" class="result-quantity-real">-</span></li>
+              <li><strong>Costo Ads:</strong> <span id="resAdCost">-</span></li>
+              <li><strong>Costo Mercadería:</strong> <span id="resCogs">-</span></li>
+              <li><strong>Utilidad Neta:</strong> <span id="resProfit" class="result-quantity-real"
+                  style="color:var(--accent-dark);">-</span> <span class="info-icon"
+                  data-tooltip="Dinero real que te queda en el bolsillo (Ventas - Ads - Costo Producto).">ℹ️</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="result-card" style="background: var(--accent); color: white;">
+          <h3 style="color: white;">Métricas Clave</h3>
+          <div class="result-body">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <span style="opacity: 0.9; font-size: 0.9rem;">ROAS (Retorno Ads) <span class="info-icon"
+                    data-tooltip="Por cada $1 puesto en publicidad, cuántos $ de venta bruta entraron."
+                    style="color:white; background:rgba(255,255,255,0.2);">ℹ️</span></span>
+                <strong style="font-size: 1.8rem; display: block;" id="resRoas">-</strong>
+              </div>
+              <div>
+                <span style="opacity: 0.9; font-size: 0.9rem;">ROI (Retorno Inversión) <span class="info-icon"
+                    data-tooltip="Rentabilidad real de tu inversión total (incluyendo costo de mercadería)."
+                    style="color:white; background:rgba(255,255,255,0.2);">ℹ️</span></span>
+                <strong style="font-size: 1.8rem; display: block;" id="resRoi">-</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <div id="modal-root"></div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    (function() {
+    (function () {
       const SCHEMA_VERSION = 1;
       const STORAGE_KEY = 'rentabilidad_app_state_v1';
       const PERIOD_LABELS = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', anual: 'Anual' };
@@ -893,10 +1332,10 @@
       };
 
       const DEFAULT_PRODUCTS = [
-        { id: 'sku_28_maicena', name: '28 mm Maicena', pricePer100: 22000, costPer100: 7234, unitsPerBox: 100, minUnits: 100, description: 'Empaque: 100 u por caja. Mínimo operativo 100 u (1 caja).' },
-        { id: 'sku_28_chocolate', name: '28 mm Chocolate', pricePer100: 23000, costPer100: 7307, unitsPerBox: 100, minUnits: 100, description: 'Empaque: 100 u por caja. Mínimo operativo 100 u (1 caja).' },
-        { id: 'sku_44_maicena', name: '44 mm Maicena', pricePer100: 32500, costPer100: 13356, unitsPerBox: 50, minUnits: 100, description: 'Empaque: 50 u por caja. Mínimo operativo 100 u (2 cajas).' },
-        { id: 'sku_44_chocolate', name: '44 mm Chocolate', pricePer100: 34000, costPer100: 13560, unitsPerBox: 50, minUnits: 100, description: 'Empaque: 50 u por caja. Mínimo operativo 100 u (2 cajas).' }
+        { id: 'sku_28_maicena', name: '100 uni. de 28mm Maicena', pricePer100: 22000, costPer100: 7234, unitsPerBox: 100, description: '1 caja de 100 unidades.' },
+        { id: 'sku_28_chocolate', name: '100 uni. de 28mm Chocolate', pricePer100: 23000, costPer100: 7307, unitsPerBox: 100, description: '1 caja de 100 unidades.' },
+        { id: 'sku_44_maicena', name: '100 uni. de 44mm Maicena', pricePer100: 32500, costPer100: 13356, unitsPerBox: 50, description: '2 cajas de 50 unidades.' },
+        { id: 'sku_44_chocolate', name: '100 uni. de 44mm Chocolate', pricePer100: 34000, costPer100: 13560, unitsPerBox: 50, description: '2 cajas de 50 unidades.' }
       ];
 
       const currencyFormatter = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 2 });
@@ -1224,7 +1663,7 @@
         toast: document.getElementById('toast')
       };
 
-      init();
+      initApp();
 
       function loadState() {
         try {
@@ -1233,7 +1672,21 @@
           const parsed = JSON.parse(raw);
           if (parsed.version !== SCHEMA_VERSION) return getDefaultState();
           const merged = Object.assign({}, getDefaultState(), parsed);
-          merged.products = Array.isArray(parsed.products) && parsed.products.length ? parsed.products.map(copyProduct) : DEFAULT_PRODUCTS.map(copyProduct);
+
+          // Load products but force update metadata for default products
+          const loadedProducts = Array.isArray(parsed.products) && parsed.products.length ? parsed.products.map(copyProduct) : DEFAULT_PRODUCTS.map(copyProduct);
+
+          merged.products = loadedProducts.map(p => {
+            const def = DEFAULT_PRODUCTS.find(d => d.id === p.id);
+            if (def) {
+              // Update metadata (name, description, unitsPerBox) but keep user pricing/cost if exists
+              p.name = def.name;
+              p.description = def.description;
+              p.unitsPerBox = def.unitsPerBox;
+            }
+            return p;
+          });
+
           merged.costs = Array.isArray(parsed.costs) ? parsed.costs.map(copyCost).filter(Boolean) : [];
           merged.costGroups = Array.isArray(parsed.costGroups) ? parsed.costGroups.map(copyCostGroup).filter(Boolean) : [];
           merged.activeCostGroupId = parsed.activeCostGroupId && merged.costGroups.some(group => group.id === parsed.activeCostGroupId) ? parsed.activeCostGroupId : null;
@@ -1246,6 +1699,7 @@
           return getDefaultState();
         }
       }
+
 
       function getDefaultState() {
         const mix = {};
@@ -1419,22 +1873,29 @@
               <div class="tag">Margen actual: ${numberFormatter.format(marginInfo.marginPct * 100)}%</div>
             </div>
             <div>
-              <div>Precio 100u: <strong>${currencyFormatter.format(product.pricePer100)}</strong></div>
-              <div>Costo 100u: <strong>${currencyFormatter.format(product.costPer100)}</strong></div>
+              <div>Precio por producto: <strong>${currencyFormatter.format(product.pricePer100)}</strong></div>
+              <div>Costo por producto: <strong>${currencyFormatter.format(product.costPer100)}</strong></div>
             </div>
             <p style="margin:0; color: var(--muted-text);">${product.description}</p>
             <div class="sku-actions">
-              <button data-action="edit-price" data-id="${product.id}">Editar precio 100u</button>
-              <button data-action="edit-cost" data-id="${product.id}">Editar costo 100u</button>
+              <button data-action="edit" data-id="${product.id}">✏️ Editar</button>
+              <button data-action="delete" data-id="${product.id}">🗑️ Eliminar</button>
             </div>
           `;
           card.querySelectorAll('button').forEach((btn) => {
-            btn.addEventListener('click', () => handleProductEdit(btn.dataset.id, btn.dataset.action));
+            btn.addEventListener('click', () => {
+              if (btn.dataset.action === 'edit') {
+                openProductModal(product);
+              } else if (btn.dataset.action === 'delete') {
+                handleDeleteProduct(btn.dataset.id);
+              }
+            });
           });
           elements.productsGrid.appendChild(card);
         });
         populateSingleSkuSelect();
         renderMixSliders();
+        renderRoiProductInputs();
       }
 
       function calculateMargins(product) {
@@ -1456,40 +1917,148 @@
         return { priceUnit, costUnit, netUnit };
       }
 
-      function handleProductEdit(productId, action) {
+      async function openProductModal(existingProduct = null) {
+        const isEdit = Boolean(existingProduct);
+        const product = existingProduct || { id: '', name: '', description: '', pricePer100: 0, costPer100: 0, unitsPerBox: 100 };
+
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+
+        const heading = document.createElement('h3');
+        heading.textContent = isEdit ? 'Editar Producto' : 'Agregar Producto';
+
+        const body = document.createElement('div');
+        body.className = 'modal-body';
+        body.innerHTML = `
+          <label>
+            <span>Nombre del producto</span>
+            <input type="text" id="productName" value="${product.name}" placeholder="Ej: 100u 28mm Maicena" />
+          </label>
+          <label>
+            <span>Descripción</span>
+            <input type="text" id="productDesc" value="${product.description}" placeholder="Ej: Empaque: 1 caja de 100 unidades" />
+          </label>
+          <label>
+            <span>Precio por producto ($)</span>
+            <input type="number" id="productPrice" value="${product.pricePer100}" min="0" step="100" />
+          </label>
+          <label>
+            <span>Costo por producto ($)</span>
+            <input type="number" id="productCost" value="${product.costPer100}" min="0" step="100" />
+          </label>
+          <label>
+            <span>Unidades por caja (para Cost Calculator)</span>
+            <input type="number" id="productUnitsPerBox" value="${product.unitsPerBox}" min="1" step="1" />
+          </label>
+        `;
+
+        const actions = document.createElement('div');
+        actions.className = 'modal-actions';
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'cancel';
+        cancelButton.textContent = 'Cancelar';
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'confirm';
+        confirmButton.textContent = isEdit ? 'Guardar' : 'Agregar';
+        actions.appendChild(cancelButton);
+        actions.appendChild(confirmButton);
+
+        modal.appendChild(heading);
+        modal.appendChild(body);
+        modal.appendChild(actions);
+        overlay.appendChild(modal);
+        document.getElementById('modal-root').appendChild(overlay);
+
+        const inputs = {
+          name: document.getElementById('productName'),
+          description: document.getElementById('productDesc'),
+          price: document.getElementById('productPrice'),
+          cost: document.getElementById('productCost'),
+          unitsPerBox: document.getElementById('productUnitsPerBox')
+        };
+
+        const close = () => document.getElementById('modal-root').removeChild(overlay);
+
+        cancelButton.addEventListener('click', close);
+        confirmButton.addEventListener('click', async () => {
+          const name = inputs.name.value.trim();
+          const description = inputs.description.value.trim();
+          const price = parseFloat(inputs.price.value);
+          const cost = parseFloat(inputs.cost.value);
+          const unitsPerBox = parseInt(inputs.unitsPerBox.value);
+
+          if (!name || !description) {
+            await openAlertModal({ title: 'Datos incompletos', message: 'Completá el nombre y la descripción.' });
+            return;
+          }
+          if (isNaN(price) || price <= 0 || isNaN(cost) || cost <= 0) {
+            await openAlertModal({ title: 'Valores inválidos', message: 'El precio y costo deben ser mayores a 0.' });
+            return;
+          }
+          if (isNaN(unitsPerBox) || unitsPerBox <= 0) {
+            await openAlertModal({ title: 'Valor inválido', message: 'Las unidades por caja deben ser mayores a 0.' });
+            return;
+          }
+
+          if (isEdit) {
+            // Update existing product
+            product.name = name;
+            product.description = description;
+            product.pricePer100 = price;
+            product.costPer100 = cost;
+            product.unitsPerBox = unitsPerBox;
+          } else {
+            // Add new product
+            const newProduct = {
+              id: 'sku_' + Date.now(),
+              name,
+              description,
+              pricePer100: price,
+              costPer100: cost,
+              unitsPerBox
+            };
+            state.products.push(newProduct);
+            state.settings.mix[newProduct.id] = 0; // Initialize mix to 0
+          }
+
+          saveState();
+          renderProducts();
+          updateCostSummary();
+          showToast(isEdit ? 'Producto actualizado' : 'Producto agregado');
+          close();
+        });
+      }
+
+      async function handleDeleteProduct(productId) {
         const product = state.products.find(p => p.id === productId);
         if (!product) return;
-        const isPrice = action === 'edit-price';
-        const title = isPrice ? 'Editar precio por 100 unidades' : 'Editar costo por 100 unidades';
-        const fieldLabel = isPrice ? 'Nuevo precio ($)' : 'Nuevo costo ($)';
-        const currentValue = isPrice ? product.pricePer100 : product.costPer100;
-        openValueModal({
-          title,
-          label: fieldLabel,
-          value: currentValue,
-          min: 0,
-          step: 1,
-          onConfirm: async (value) => {
-            const numeric = parseFloat(value);
-            if (isNaN(numeric) || numeric <= 0) {
-              await openAlertModal({
-                title: 'Valor inválido',
-                message: 'Ingresá un valor numérico mayor a 0.'
-              }); // REPLACED: native dialog → internal modal
-              return false;
-            }
-            if (isPrice) {
-              product.pricePer100 = numeric;
-            } else {
-              product.costPer100 = numeric;
-            }
-            saveState();
-            renderProducts();
-            updateCostSummary();
-            showToast('Producto actualizado');
-            return true;
-          }
+
+        const confirmed = await openConfirmModal({
+          title: 'Eliminar producto',
+          message: `¿Estás seguro de eliminar "${product.name}"? Esta acción no se puede deshacer.`,
+          confirmText: 'Eliminar',
+          cancelText: 'Cancelar'
         });
+
+        if (!confirmed) return;
+
+        // Remove product
+        state.products = state.products.filter(p => p.id !== productId);
+        delete state.settings.mix[productId];
+
+        // If it was the selected SKU, select the first one
+        if (state.settings.selectedSkuId === productId && state.products.length > 0) {
+          state.settings.selectedSkuId = state.products[0].id;
+        }
+
+        saveState();
+        renderProducts();
+        updateCostSummary();
+        showToast('Producto eliminado');
       }
 
       function openValueModal({ title, label, value, min, step, onConfirm }) {
@@ -1870,7 +2439,7 @@
             </label>
             <label>
               <span>Tipo</span>
-              <select id="costType">
+              <select type="text" id="costType">
                 <option value="fijo" ${cost.type !== 'inversion' ? 'selected' : ''}>Fijo recurrente</option>
                 <option value="inversion" ${cost.type === 'inversion' ? 'selected' : ''}>Inversión amortizable</option>
               </select>
@@ -2117,7 +2686,6 @@
             list.style.listStyle = 'none';
             list.style.padding = '0';
             list.style.margin = '8px 0 0';
-            list.style.display = 'flex';
             list.style.flexDirection = 'column';
             list.style.gap = '6px';
             lastResults[0].items.forEach((item) => {
@@ -2348,7 +2916,7 @@
         lines.push(`Facturación estimada: ${currencyFormatter.format(exact)}`);
         lines.push(`Facturación real: ${currencyFormatter.format(real)}`);
         result.items.forEach((item) => {
-          lines.push(`- ${item.product.name}: Real ${formatInteger(item.roundedBoxes)} cajas (${formatInteger(item.roundedUnits)} u) · Exacta ${formatBoxes(item.boxes)} cajas (${formatUnits(item.units)} u)`);
+          lines.push(`- ${item.product.name}: Real ${formatInteger(item.roundedBoxes)} cajas (${formatInteger(item.roundedUnits)} u) · Exacta ${formatBoxes(item.units / item.product.unitsPerBox)} cajas (${formatUnits(item.units)} u)`);
         });
         if (result.warnings && result.warnings.length) {
           lines.push('Alertas:');
@@ -2501,7 +3069,377 @@
       }
 
       window.addEventListener('beforeunload', saveState);
+      // --- ROI Calculator & Navigation Logic ---
+
+      function initApp() {
+        // Bind Menu Events
+        document.getElementById('btnOpenCostApp').addEventListener('click', () => switchApp('cost'));
+        document.getElementById('btnOpenRoiApp').addEventListener('click', () => switchApp('roi'));
+        document.getElementById('backToMenuFromCost').addEventListener('click', () => switchApp('menu'));
+        document.getElementById('backToMenuFromRoi').addEventListener('click', () => switchApp('menu'));
+
+        // Init Cost App (Original)
+        init();
+
+        // Init ROI App
+        initRoiApp();
+      }
+
+      function switchApp(target) {
+        const menu = document.getElementById('main-menu');
+        const costApp = document.getElementById('cost-app');
+        const roiApp = document.getElementById('roi-app');
+        const productsSection = document.getElementById('productsSection');
+
+        menu.style.display = 'none';
+        costApp.style.display = 'none';
+        roiApp.style.display = 'none';
+
+        // Products section is inside menu by default structure, but we might want to show/hide it
+        // Actually, since it's a child of #main-menu, hiding #main-menu hides it.
+        // But we want it visible in Cost App too.
+        // Solution: Move it in DOM? Or just clone it? 
+        // Better: Just toggle visibility.
+        // Wait, if it's inside #main-menu div, I can't show it without showing the menu buttons if they are siblings.
+        // Let's do this: When in Cost App, we SHOW #main-menu but HIDE the .menu-grid (buttons).
+        // When in ROI App, we HIDE #main-menu completely.
+
+        const menuGrid = document.querySelector('.menu-grid');
+        const menuTitle = document.querySelector('#main-menu h1');
+
+        if (target === 'menu') {
+          menu.style.display = 'flex';
+          menuGrid.style.display = 'grid';
+          menuTitle.style.display = 'block';
+          productsSection.style.display = 'block';
+          window.scrollTo(0, 0);
+        } else if (target === 'cost') {
+          // Cost App Mode: Hide products section
+          menu.style.display = 'none';
+          costApp.style.display = 'flex';
+          window.scrollTo(0, 0);
+        } else if (target === 'roi') {
+          // ROI App Mode: Hide everything related to Cost App/Menu
+          menu.style.display = 'none';
+          roiApp.style.display = 'flex';
+          window.scrollTo(0, 0);
+
+          // Render inputs for Real Mode
+          renderRoiProductInputs();
+        }
+      }
+
+      // Initialize Menu Navigation
+      document.getElementById('btnOpenCostApp').addEventListener('click', () => switchApp('cost'));
+      document.getElementById('btnOpenRoiApp').addEventListener('click', () => switchApp('roi'));
+      document.getElementById('backToMenuFromCost').addEventListener('click', () => switchApp('menu'));
+      document.getElementById('backToMenuFromRoi').addEventListener('click', () => switchApp('menu'));
+
+      // Initialize Product Management
+      document.getElementById('addProductBtn').addEventListener('click', () => openProductModal());
+
+
+      function renderRoiProductInputs() {
+        const container = document.getElementById('roiProductInputs');
+        if (!container) return;
+        container.innerHTML = '';
+
+        state.products.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'parameter-card';
+          card.innerHTML = `
+            <label>
+              <span>${product.name}</span>
+              <input 
+                type="number" 
+                class="roi-product-qty" 
+                data-id="${product.id}" 
+                min="0" 
+                step="0.1" 
+                placeholder="Ej: 3.5" 
+              />
+            </label>
+            <small style="color: var(--muted-text); font-size: 0.85rem; margin-top: -8px; display: block;">
+              Precio: ${currencyFormatter.format(product.pricePer100)} | Costo: ${currencyFormatter.format(product.costPer100)}
+            </small>
+            <div class="roi-breakdown" id="breakdown-${product.id}" style="margin-top: 8px; font-size: 0.85rem; color: var(--text-color); background: rgba(0,0,0,0.03); padding: 8px; border-radius: 8px; display: none;">
+              <div style="display: flex; justify-content: space-between;"><span>Facturado:</span> <strong class="val-revenue">$0</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Costo:</span> <strong class="val-cost">$0</strong></div>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 4px;"><span>Ganancia:</span> <strong class="val-profit" style="color: var(--accent-dark);">$0</strong></div>
+            </div>
+          `;
+
+          const input = card.querySelector('input');
+          const breakdown = card.querySelector('.roi-breakdown');
+          const valRevenue = breakdown.querySelector('.val-revenue');
+          const valCost = breakdown.querySelector('.val-cost');
+          const valProfit = breakdown.querySelector('.val-profit');
+
+          input.addEventListener('input', () => {
+            const qty = parseFloat(input.value) || 0;
+            if (qty > 0) {
+              breakdown.style.display = 'block';
+
+              // Calculate based on product type (50u vs 100u)
+              const is50Unit = product.name.toLowerCase().includes('50u') || product.name.toLowerCase().includes('50 uni');
+              const price = is50Unit ? product.pricePer100 / 2 : product.pricePer100;
+              const cost = is50Unit ? product.costPer100 / 2 : product.costPer100;
+
+              const revenue = qty * price;
+              const cogs = qty * cost;
+              const profit = revenue - cogs;
+
+              valRevenue.textContent = currencyFormatter.format(revenue);
+              valCost.textContent = currencyFormatter.format(cogs);
+              valProfit.textContent = currencyFormatter.format(profit);
+              valProfit.style.color = profit >= 0 ? '#4c8256' : '#b33727';
+            } else {
+              breakdown.style.display = 'none';
+            }
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      function initRoiApp() {
+        const ROI_STORAGE_KEY = 'roi_app_state_v1';
+        let currentMode = 'real'; // Default to real
+
+        const roiInputs = {
+          budget: document.getElementById('roiBudget'),
+          cpm: document.getElementById('roiCpm'),
+          ctr: document.getElementById('roiCtr'),
+          convRate: document.getElementById('roiConvRate'),
+          aov: document.getElementById('roiAov'),
+          margin: document.getElementById('roiMargin'), // Added margin input
+          // Real inputs
+          realBudget: document.getElementById('roiRealBudget')
+        };
+
+        const roiOutputs = {
+          section: document.getElementById('roiResultsSection'),
+          cardFunnel: document.getElementById('cardFunnel'),
+          cardSales: document.getElementById('cardSales'),
+          impressions: document.getElementById('resImpressions'),
+          clicks: document.getElementById('resClicks'),
+          cpc: document.getElementById('resCpc'),
+          conversions: document.getElementById('resConversions'),
+          cpa: document.getElementById('resCpa'),
+          globalConv: document.getElementById('resGlobalConv'),
+          revenue: document.getElementById('resRevenue'),
+          adCost: document.getElementById('resAdCost'),
+          cogs: document.getElementById('resCogs'),
+          profit: document.getElementById('resProfit'),
+          roas: document.getElementById('resRoas'),
+          roi: document.getElementById('resRoi')
+        };
+
+        // Tabs Logic
+        const tabs = document.querySelectorAll('.roi-tab-btn');
+        const projectionPanel = document.getElementById('roiProjectionInputs');
+        const realPanel = document.getElementById('roiRealInputs');
+
+        // Set initial display based on default mode
+        if (currentMode === 'projection') {
+          projectionPanel.style.display = 'block';
+          realPanel.style.display = 'none';
+        } else {
+          projectionPanel.style.display = 'none';
+          realPanel.style.display = 'block';
+        }
+        // Set active tab button
+        const initialTab = document.querySelector(`.roi-tab-btn[data-tab="${currentMode}"]`);
+        if (initialTab) initialTab.classList.add('active');
+
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentMode = tab.dataset.tab;
+
+            if (currentMode === 'projection') {
+              projectionPanel.style.display = 'block';
+              realPanel.style.display = 'none';
+            } else {
+              projectionPanel.style.display = 'none';
+              realPanel.style.display = 'block';
+            }
+            // Hide results when switching modes to avoid confusion
+            roiOutputs.section.style.display = 'none';
+          });
+        });
+
+        // Load State
+        try {
+          const saved = localStorage.getItem(ROI_STORAGE_KEY);
+          if (saved) {
+            const data = JSON.parse(saved);
+            Object.keys(roiInputs).forEach(key => {
+              if (data[key] !== undefined && roiInputs[key]) roiInputs[key].value = data[key];
+            });
+            // Restore mode if saved
+            if (data.mode) {
+              currentMode = data.mode;
+              const tab = document.querySelector(`.roi-tab-btn[data-tab="${data.mode}"]`);
+              if (tab) {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+              }
+              if (currentMode === 'projection') {
+                projectionPanel.style.display = 'block';
+                realPanel.style.display = 'none';
+              } else {
+                projectionPanel.style.display = 'none';
+                realPanel.style.display = 'block';
+              }
+            }
+          }
+        } catch (e) {
+          console.error('Error loading ROI state', e);
+        }
+
+        // Bind Events
+        document.getElementById('calculateRoiBtn').addEventListener('click', calculateRoi);
+        document.getElementById('resetRoiBtn').addEventListener('click', () => {
+          Object.values(roiInputs).forEach(input => { if (input) input.value = ''; });
+          roiOutputs.section.style.display = 'none';
+          localStorage.removeItem(ROI_STORAGE_KEY);
+          showToast('Cálculo reseteado');
+        });
+
+        function calculateRoi() {
+          const values = {};
+          let valid = true;
+
+          // Validate based on mode
+          const keysToValidate = currentMode === 'projection'
+            ? ['budget', 'cpm', 'ctr', 'convRate', 'aov', 'margin']
+            : ['realBudget'];
+
+          keysToValidate.forEach(key => {
+            const val = parseFloat(roiInputs[key].value);
+            if (isNaN(val) || val < 0) valid = false;
+            values[key] = val;
+          });
+
+          if (!valid) {
+            showToast('Por favor completá todos los campos con valores válidos');
+            return;
+          }
+
+          // Save State
+          const allValues = { mode: currentMode };
+          Object.keys(roiInputs).forEach(key => {
+            if (roiInputs[key]) allValues[key] = roiInputs[key].value;
+          });
+          localStorage.setItem(ROI_STORAGE_KEY, JSON.stringify(allValues));
+
+          let budget, revenue, costOfGoods, profit, roas, roi;
+          let impressions = 0, clicks = 0, cpc = 0, conversions = 0, cpa = 0;
+
+          if (currentMode === 'projection') {
+            budget = values.budget;
+            const margin = values.margin;
+
+            // Funnel Calcs
+            impressions = budget / (values.cpm / 1000);
+            clicks = impressions * (values.ctr / 100);
+            cpc = clicks > 0 ? budget / clicks : 0;
+            conversions = clicks * (values.convRate / 100);
+            cpa = conversions > 0 ? budget / conversions : 0;
+            revenue = conversions * values.aov;
+
+            costOfGoods = revenue * (1 - (margin / 100));
+            profit = revenue - budget - costOfGoods;
+
+            // Show Funnel Cards
+            roiOutputs.cardFunnel.style.display = 'flex';
+            roiOutputs.cardSales.style.display = 'flex';
+
+            // Render Funnel
+            roiOutputs.impressions.textContent = formatInteger(impressions);
+            roiOutputs.clicks.textContent = formatInteger(clicks);
+            roiOutputs.cpc.textContent = currencyFormatter.format(cpc);
+            roiOutputs.conversions.textContent = formatInteger(conversions);
+            roiOutputs.cpa.textContent = currencyFormatter.format(cpa);
+            roiOutputs.globalConv.textContent = values.convRate + '%';
+
+          } else {
+            // Real Mode - Product-based calculation
+            budget = values.realBudget;
+
+            // Calculate Revenue and COGS based on products sold
+            revenue = 0;
+            costOfGoods = 0;
+            const productInputs = document.querySelectorAll('.roi-product-qty');
+
+            productInputs.forEach(input => {
+              const qty = parseFloat(input.value) || 0;
+              if (qty > 0) {
+                const pid = input.dataset.id;
+                const product = state.products.find(p => p.id === pid);
+
+                if (product) {
+                  // Check if it's a 50-unit product (special case: price/2)
+                  const is50Unit = product.name.toLowerCase().includes('50u');
+
+                  if (is50Unit) {
+                    // For 50u products: divide price and cost by 2
+                    revenue += qty * (product.pricePer100 / 2);
+                    costOfGoods += qty * (product.costPer100 / 2);
+                  } else {
+                    // For regular 100u products
+                    revenue += qty * product.pricePer100;
+                    costOfGoods += qty * product.costPer100;
+                  }
+                }
+              }
+            });
+
+            profit = revenue - budget - costOfGoods;
+
+            // Hide Funnel Cards
+            roiOutputs.cardFunnel.style.display = 'none';
+            roiOutputs.cardSales.style.display = 'none';
+
+            // Clear projection-specific outputs
+            roiOutputs.impressions.textContent = '-';
+            roiOutputs.clicks.textContent = '-';
+            roiOutputs.cpc.textContent = '-';
+            roiOutputs.conversions.textContent = '-';
+            roiOutputs.cpa.textContent = '-';
+            roiOutputs.globalConv.textContent = '-';
+          }
+
+          // Common Metrics
+          roas = budget > 0 ? revenue / budget : 0;
+          const totalInvestment = budget + costOfGoods;
+          roi = totalInvestment > 0 ? (profit / totalInvestment) * 100 : 0;
+
+          // Render Financials
+          roiOutputs.revenue.textContent = currencyFormatter.format(revenue);
+          roiOutputs.adCost.textContent = currencyFormatter.format(budget);
+          roiOutputs.cogs.textContent = currencyFormatter.format(costOfGoods);
+          roiOutputs.profit.textContent = currencyFormatter.format(profit);
+
+          roiOutputs.roas.textContent = numberFormatter.format(roas) + 'x';
+          roiOutputs.roi.textContent = numberFormatter.format(roi) + '%';
+
+          // Colorize Profit/ROI
+          roiOutputs.profit.style.color = profit >= 0 ? '#4c8256' : '#b33727';
+          roiOutputs.roi.style.color = roi >= 0 ? 'white' : '#ffcccb';
+
+          roiOutputs.section.style.display = 'block';
+
+          setTimeout(() => {
+            roiOutputs.section.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      }
     })();
   </script>
 </body>
+
 </html>
